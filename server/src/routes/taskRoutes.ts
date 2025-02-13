@@ -84,6 +84,45 @@ router.delete('/tasks/:id', async (req: Request, res: Response) => {
     }
 });
 
+// Ruta para actualizar una tarea por ID
+router.put('/tasks/:id', async (req: Request, res: Response) => {
+    try {
+        const taskId = req.params.id;
+        const { nombre_tarea, descripcion, estado } = req.body; // Obtén los campos a actualizar
+
+        // Validar que el ID sea un número (o el tipo de dato que corresponda a tu ID)
+        if (isNaN(Number(taskId))) {
+            res.status(400).json({ error: 'ID inválido' });
+        }
+        else{
+            const task = await Task.findByPk(taskId);
+
+            if (!task) {
+                res.status(404).json({ error: 'Tarea no encontrada' });
+            }
+            else{
+                // Actualiza los campos que se proporcionan en el body
+                if (nombre_tarea) {
+                    task.nombre_tarea = nombre_tarea;
+                }
+                if (descripcion) {
+                    task.descripcion = descripcion;
+                }
+                if (estado) {
+                    task.estado = estado;
+                }
+    
+                await task.save(); // Guarda los cambios en la base de datos
+    
+                res.json(task); // Devuelve la tarea actualizada    
+            }
+        }
+        
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al actualizar la tarea' });
+    }
+});
 
 
 export default router;
