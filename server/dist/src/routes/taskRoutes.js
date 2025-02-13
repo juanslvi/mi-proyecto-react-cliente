@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const task_1 = __importDefault(require("../models/task"));
 const router = express_1.default.Router();
-//Ruta para obtener todas las tareas
+// Ruta para obtener todas las tareas
 router.get('/tasks', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const tasks = yield task_1.default.findAll();
@@ -24,6 +24,25 @@ router.get('/tasks', (req, res) => __awaiter(void 0, void 0, void 0, function* (
     catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al obtener las tareas' });
+    }
+}));
+// Ruta para obtener todas las tareas
+router.get('/tasks/:id', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const taskId = req.params.id;
+        // Validar que el ID sea un número (o el tipo de dato que corresponda a tu ID)
+        if (isNaN(Number(taskId))) { // Si tu ID es UUID, usa una validación de UUID
+            res.status(400).json({ error: 'Error al obtener la tarea' });
+        }
+        const task = yield task_1.default.findByPk(taskId); // Método más eficiente para buscar por ID
+        if (!task) {
+            res.status(400).json({ error: 'Tarea no encontrada' });
+        }
+        res.json(task);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al obtener la tarea' });
     }
 }));
 exports.default = router;
