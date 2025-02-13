@@ -37,4 +37,24 @@ router.get('/tasks/:id', async (req: Request, res: Response) => {
     }
 });
 
+// Crear una nueva tarea
+router.post('/tasks', async (req: Request, res: Response) => {
+    try {
+        const { nombre_tarea, descripcion, estado } = req.body; // Ajusta los campos según tu modelo
+
+        if (!nombre_tarea || !descripcion || !estado) { // Validación básica
+            res.status(400).json({ error: 'Faltan campos obligatorios' });
+        }
+
+        const newTask = await Task.create({ nombre_tarea, descripcion, estado });
+        //const newTaskData = { nombre_tarea, descripcion, estado };
+        
+
+        res.status(201).json(newTask); // 201 Created es el código de respuesta adecuado
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Error al crear la tarea' });
+    }
+});
+
 export default router;

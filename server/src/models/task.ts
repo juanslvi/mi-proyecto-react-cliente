@@ -8,7 +8,14 @@ interface TaskAttributes {
     estado: string;
 }
 
-class Task extends Model<TaskAttributes> implements TaskAttributes {
+//interface para crear tareas sin el campo ID autoincremento
+interface TaskCreationAttributes {
+  nombre_tarea: string;
+  descripcion: string;
+  estado: string;
+}
+
+class Task extends Model<TaskAttributes, TaskCreationAttributes> implements TaskAttributes {
     public id!: number;
     public nombre_tarea!: string;
     public descripcion!: string;
