@@ -14,4 +14,4 @@ app.get('/api/hello', (req: Request, res: Response) => {
 
 app.listen(port, () => {
   console.log(`Servidor corriendo en el puerto ${port}`);
-});
+}); 
