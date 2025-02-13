@@ -1,11 +1,13 @@
 {
   "name": "server",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "start": "react-scripts start",
-    "server": "nodemon server/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon --exec ts-node index.ts",
+    "dev": "nodemon --exec ts-node index.ts",
+    "server": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

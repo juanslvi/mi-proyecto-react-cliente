@@ -1,17 +1,13 @@
-import express, { Request, Response } from 'express';
-import cors from 'cors';
+import app from './src/app';
+import { sequelize } from './src/db';
 
-const app = express();
-const port = process.env.PORT || 5000; // Usa una variable de entorno para el puerto
+const PORT = process.env.PORT || 5000;
+//const PORT = process.env.PORT || 3001;
 
-app.use(cors()); // Habilita CORS para todas las rutas
-app.use(express.json()); // Habilita el análisis de JSON en las solicitudes
-
-// Rutas de ejemplo
-app.get('/api/hello', (req: Request, res: Response) => {
-  res.send('¡Hola desde el backend!');
+sequelize.sync().then(() => { // Sincroniza la base de datos antes de iniciar el servidor
+    app.listen(PORT, () => {
+        console.log(`Server listening on port ${PORT}`);
+    });
+}).catch(err => {
+    console.error("Error syncing database:", err);
 });
-
-app.listen(port, () => {
-  console.log(`Servidor corriendo en el puerto ${port}`);
-});  
