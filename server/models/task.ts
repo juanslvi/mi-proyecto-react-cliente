@@ -1,23 +1,23 @@
 import { DataTypes, Model } from 'sequelize';
-import { sequelize } from './db'; // Importa la instancia de Sequelize
+import { sequelize } from '../db';
 
 interface TaskAttributes {
     id: number;
     nombre_tarea: string;
     descripcion: string;
-    estado: string;    
-  }
+    estado: string;
+}
 
-  class Task extends Model<TaskAttributes> implements TaskAttributes{
-    public id!:number;
-    public nombre_tarea!:string;
+class Task extends Model<TaskAttributes> implements TaskAttributes {
+    public id!: number;
+    public nombre_tarea!: string;
     public descripcion!: string;
     public estado!: string;
 
-    static async findByNombre(nombre_tarea: string){
-        return Task.findOne({where:{nombre_tarea}});
+    static async findByNombre(nombre_tarea: string): Promise<Task | null> { // Tipo de retorno más específico
+        return Task.findOne({ where: { nombre_tarea } });
     }
-  }
+}
 
   Task.init(
     {
@@ -37,6 +37,7 @@ interface TaskAttributes {
           estado: {
             type: DataTypes.STRING,
             allowNull: false,
+            defaultValue: 'Pendiente', // Valor por defecto
           },
     },
     {
