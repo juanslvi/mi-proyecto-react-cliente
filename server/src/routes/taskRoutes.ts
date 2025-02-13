@@ -14,7 +14,7 @@ router.get('/tasks', async (req: Request, res: Response) => {
     }
 });
 
-// Ruta para obtener todas las tareas
+// Ruta para obtener todas las tareas por ID
 router.get('/tasks/:id', async (req: Request, res: Response) => {
     try {
         const taskId = req.params.id;
@@ -23,14 +23,16 @@ router.get('/tasks/:id', async (req: Request, res: Response) => {
         if (isNaN(Number(taskId))) {  // Si tu ID es UUID, usa una validación de UUID
             res.status(400).json({ error: 'Error al obtener la tarea' });
         }
-
-        const task = await Task.findByPk(taskId); // Método más eficiente para buscar por ID
+        else{
+            const task = await Task.findByPk(taskId); // Método más eficiente para buscar por ID
         
-        if(!task){
-            res.status(400).json({ error: 'Tarea no encontrada' });
-        }
-
-        res.json(task);
+            if(task){
+                res.json(task);                
+            }
+            else{
+                res.status(400).json({ error: 'Tarea no encontrada' });
+            }    
+        }            
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al obtener la tarea' });
@@ -45,12 +47,10 @@ router.post('/tasks', async (req: Request, res: Response) => {
         if (!nombre_tarea || !descripcion || !estado) { // Validación básica
             res.status(400).json({ error: 'Faltan campos obligatorios' });
         }
-
-        const newTask = await Task.create({ nombre_tarea, descripcion, estado });
-        //const newTaskData = { nombre_tarea, descripcion, estado };
-        
-
-        res.status(201).json(newTask); // 201 Created es el código de respuesta adecuado
+        else{
+            const newTask = await Task.create({ nombre_tarea, descripcion, estado });    
+            res.status(201).json(newTask); // 201 Created es el código de respuesta adecuado
+        }        
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al crear la tarea' });
@@ -63,23 +63,27 @@ router.delete('/tasks/:id', async (req: Request, res: Response) => {
         const taskId = req.params.id;
 
         // Validar que el ID sea un número (o el tipo de dato que corresponda a tu ID)
-        if (isNaN(Number(taskId))) { // Si tu ID es UUID, usa una validación de UUID
+        if (isNaN(Number(taskId))) {
             res.status(400).json({ error: 'ID inválido' });
         }
-
-        const task = await Task.findByPk(taskId);
-
-        if(task){
-            await task.destroy(); // Elimina la tarea de la base de datos
-            res.status(204).end(); // 204 No Content es la respuesta adecuada para una eliminación exitosa
-        }
         else{
-            res.status(404).json({ error: 'Tarea no encontrada' });
+            const task = await Task.findByPk(taskId);
+
+            if(task){
+                await task.destroy(); // Elimina la tarea de la base de datos
+                res.status(204).end(); // 204 No Content es la respuesta adecuada para una eliminación exitosa
+            }
+            else{
+                res.status(404).json({ error: 'Tarea no encontrada' });
+            }
         }
+        
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Error al eliminar la tarea' });
     }
 });
+
+
 
 export default router;
