@@ -42,12 +42,25 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, onClose }) => {
 
   const mutation = useMutation({
     mutationFn: async (data: Task) => {
-      const response = await axios.post('/api/tasks', data);
-      return response.data;
+      //const response = await axios.post('/api/tasks', data);
+      if (task) { // Check if task exists (editing)
+        const response = await axios.put(`/api/tasks/${task.id}`, data); // Use PUT for update
+        return response.data;
+      } else { // Creating a new task
+        const response = await axios.post('/api/tasks', data); // Use POST for create
+        return response.data;
+      }
+      //return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
-      toast.success("Tarea creada con éxito!");
+      
+      if (task) {
+        toast.success("Tarea actualizada con éxito!");
+      } else {
+          toast.success("Tarea creada con éxito!");
+      }
+      
       onClose();
     },
     onError: (error) => {
