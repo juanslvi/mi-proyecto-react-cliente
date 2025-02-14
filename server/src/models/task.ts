@@ -39,7 +39,7 @@ class Task extends Model<TaskAttributes, TaskCreationAttributes> implements Task
           },
           descripcion: {
             type: DataTypes.STRING,
-            allowNull: false,
+            allowNull: true,
           },
           estado: {
             type: DataTypes.STRING,

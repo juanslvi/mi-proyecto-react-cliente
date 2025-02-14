@@ -73,7 +73,7 @@ const TaskList: React.FC = () => {
 
   return (
     <Container>
-        <Banner>
+      <Banner>
         <BannerLink href="/">Inicio</BannerLink>
         <BannerLink href="/tasks">Tareas</BannerLink>
       </Banner>
@@ -81,39 +81,42 @@ const TaskList: React.FC = () => {
       <Title>Lista de Tareas</Title>
       <CreateButton onClick={() => setIsCreating(true)}>Crear Tarea</CreateButton>
 
-
-            {/* Filtro por nombre */}
-            <FilterContainer>
-                <FilterLabel htmlFor="filterName">Filtrar por nombre:</FilterLabel>
-                <FilterInput
-                    type="text"
-                    id="filterName"
-                    value={filterName}
-                    onChange={e => setFilterName(e.target.value)}
-                    placeholder="Escribe un nombre..."
-                />
-            </FilterContainer>
+      <FilterContainer>
+        <FilterLabel htmlFor="filterName">Filtrar por nombre:</FilterLabel>
+        <FilterInput
+          type="text"
+          id="filterName"
+          value={filterName}
+          onChange={e => setFilterName(e.target.value)}
+          placeholder="Escribe un nombre..."
+        />
+      </FilterContainer>
 
       {isCreating && <TaskForm onClose={() => setIsCreating(false)} />}
       {editingTask && <TaskForm task={editingTask} onClose={() => setEditingTask(null)} />}
 
       <TaskListUl>
-          {filteredTasks.map((task: Task) => (
-              <TaskItem key={task.id}> {/* Un solo TaskItem por tarea */}
-                  <TaskName>Tarea: {task.nombre_tarea}</TaskName>
-                  <TaskDescription>Descripcion: {task.descripcion}</TaskDescription>
-                  <TaskStatus>Estado: {task.estado}</TaskStatus>
-                  <TaskCreatedAt>Creada: {new Date(task.createdAt).toLocaleDateString()}</TaskCreatedAt>
-                  <EditButton onClick={() => setEditingTask(task)}>Editar</EditButton>
-                  <DeleteButton onClick={() => handleDelete(task)}>Eliminar</DeleteButton>
-          
-                  <TaskImageContainer>
-                      <TaskImage src='./pdf.png' alt='imagen'/>
-                  </TaskImageContainer>
-              </TaskItem>
-          ))}
+        {filteredTasks.map((task: Task) => (
+          <TaskItem key={task.id}>
+            <TaskContent> 
+              <TaskName>Tarea: {task.nombre_tarea}</TaskName>
+              <TaskCreatedAt>Creada: {new Date(task.createdAt).toLocaleDateString()}</TaskCreatedAt>
+              <TaskDescription>Descripcion: {task.descripcion}</TaskDescription>
+              <TaskStatus>Estado: {task.estado}</TaskStatus>
+            </TaskContent>
+            <TaskActions> 
+                <TaskImageContainer>
+                    <TaskImage src='./pdf.png' alt='imagen' title='Consultar PDF'/>
+                </TaskImageContainer>
+                <ButtonContainer>
+                    <EditButton onClick={() => setEditingTask(task)}>Editar</EditButton>
+                    <DeleteButton onClick={() => handleDelete(task)}>Eliminar</DeleteButton>
+                </ButtonContainer>
+            </TaskActions>
+          </TaskItem>
+        ))}
       </TaskListUl>
-         <ToastContainer />
+      <ToastContainer />
     </Container>
   );
 };
@@ -127,7 +130,8 @@ const Container = styled.div`
   align-items: center;
   padding: 20px;
   font-family: sans-serif;
-  background-color: #f4f4f4; // Color de fondo
+  background-color: #f4f4f4;
+  min-height: 100vh; // Ensure container takes full viewport height
 `;
 
 const Banner = styled.div`
@@ -156,6 +160,20 @@ const Title = styled.h2`
   margin-bottom: 20px;
 `;
 
+const TaskContent = styled.div`
+  flex: 1; /* Allow content to grow and take available space */
+  margin-bottom: 10px; // Add some margin for smaller screens
+  @media (min-width: 768px) {
+    margin-bottom: 0; // Remove margin on larger screens
+  }
+`;
+
+const TaskActions = styled.div`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`;
+
 const CreateButton = styled.button`
   padding: 10px 20px;
   background-color: #EB7E28; // Color del botón crear
@@ -173,32 +191,44 @@ const CreateButton = styled.button`
 const TaskListUl = styled.ul`
   list-style: none;
   padding: 0;
-  width: 80%;
+  width: 90%; // Occupy most of the container width
+  max-width: 900px; // Set a maximum width for larger screens
 `;
 
 const TaskItem = styled.li`
-  border: none; // Sin borde
+  border: none;
   margin-bottom: 10px;
   padding: 15px;
-  border-radius: 8px; // Bordes redondeados
-  background-color: #FBE5CC; // Color de fondo de la tarea
-  box-shadow: 2px 2px 5px rgba(0,0,0,0.1);
-  transition: transform 0.2s ease-in-out; // Transición para el hover
+  border-radius: 8px;
+  background-color: #FBE5CC;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  transition: transform 0.2s ease-in-out;
+  display: flex;       // Use flexbox for layout
+  flex-direction: column; // Stack elements vertically by default
+  align-items: flex-start; // Align items to the start (left on larger screens)
+
+  @media (min-width: 768px) { // Adjust breakpoint as needed
+    flex-direction: row;   // Switch to row layout on larger screens
+    align-items: center;  // Vertically align items in the row
+    justify-content: space-between; // Distribute space between content and actions
+  }
 
   &:hover {
-    transform: scale(1.02); // Ligero aumento al pasar el cursor
-    background-color: #FFF9E1; // Color de fondo al pasar el cursor
+    transform: scale(1.02);
+    background-color: #FFF9E1;
   }
 `;
 
 const TaskName = styled.h3`
   margin-top: 0;
   color: #F07C1E; // Color del nombre de la tarea
+  
 `;
 
 const TaskDescription = styled.p`
   margin-bottom: 5px;
   color: #333; // Color de la descripción
+
 `;
 
 const TaskStatus = styled.p`
@@ -265,21 +295,26 @@ const FilterInput = styled.input`
 `;
 
 const TaskImageContainer = styled.div`
-    width: 50px; // Ajusta el tamaño según necesites
+    width: 50px;
     height: 50px;
-    margin-left: auto; // Empuja la imagen a la derecha
+    margin-right: 10px;
     display: flex;
-    justify-content: center; // Centrar horizontalmente
-    align-items: center; // Centrar verticalmente
-    border-radius: 8px; // Bordes redondeados (opcional)
-    overflow: hidden; // Ocultar contenido que se salga del contenedor
+    justify-content: center;
+    align-items: center;
+    border-radius: 8px;
+    overflow: hidden;
+    
 `;
 
 const TaskImage = styled.img`
     width: 100%;
     height: 100%;
-     background-image: url('/pdf.png');
-    background-size: cover;
-    background-position: center;
-    object-fit: cover; // Ajustar la imagen al contenedor y mantener la relación de aspecto
+    object-fit: cover;
+    display: block;
+    vertical-align: top;
+`;
+
+const ButtonContainer = styled.div` // Nuevo contenedor para los botones
+  display: flex;
+  white-space: nowrap; // Prevent buttons from wrapping
 `;

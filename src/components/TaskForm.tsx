@@ -52,7 +52,13 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, onClose }) => {
     },
     onError: (error) => {
       console.error("Error creando tarea:", error);
-      toast.error("Error al crear la tarea. Inténtalo de nuevo.");      
+      //toast.error("Error al crear la tarea. Inténtalo de nuevo.");      
+       // Manejo de errores más específico
+       if (axios.isAxiosError(error)) {
+        toast.error(`Error al crear la tarea: ${error.response?.data?.message || error.message}`); // Mensaje de error del backend o mensaje genérico
+      } else {
+        toast.error("Error al crear la tarea. Inténtalo de nuevo."); // Mensaje genérico para otros errores
+      }
     }
   });
 
@@ -60,10 +66,16 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, onClose }) => {
     try {
       await mutation.mutateAsync(data);
     } catch (error) {
-      toast.error("Error al enviar el formulario.");   
+      //toast.error("Error al enviar el formulario.");   
       console.error("Error al enviar el formulario:", error);
     }
   };
+
+  /*
+  const onSubmit = (data: Task) => {
+    console.log("Datos enviados:", data); // Imprime los datos antes de enviarlos
+    mutation.mutate(data);
+  };*/
 
 
 
@@ -107,13 +119,16 @@ export default TaskForm;
 
 // Estilos con styled-components
 const Form = styled.form`
-  display: flex;
+   display: flex;
   flex-direction: column;
   gap: 1rem;
   padding: 20px;
   border-radius: 5px;
-  background-color: #FBE5CC; // #FBE5CC
+  background-color: #FBE5CC;
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+  width: 90%; // Make the form take up most of the container's width
+  max-width: 600px; // Set a maximum width so it doesn't get too wide
+  margin: 0 auto; // Center the form horizontally
 `;
 
 const FormGroup = styled.div`

@@ -6,7 +6,11 @@ const router = express.Router();
 // Ruta para obtener todas las tareas
 router.get('/tasks', async (req: Request, res: Response) => {
     try {
-        const tasks = await Task.findAll();
+        const tasks = await Task.findAll({
+            order: [
+                ['id', 'DESC'] // Ordena por el campo 'id' de forma descendente (mayor a menor)
+            ]
+        });
         res.json(tasks);
     } catch (error) {
         console.error(error);
@@ -44,7 +48,7 @@ router.post('/tasks', async (req: Request, res: Response) => {
     try {
         const { nombre_tarea, descripcion, estado } = req.body; // Ajusta los campos según tu modelo
 
-        if (!nombre_tarea || !descripcion || !estado) { // Validación básica
+        if (!nombre_tarea || !estado) { // Validación básica
             res.status(400).json({ error: 'Faltan campos obligatorios' });
         }
         else{
