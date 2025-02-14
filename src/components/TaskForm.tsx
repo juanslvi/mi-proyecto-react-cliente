@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import styled from 'styled-components';
+import { toast, ToastContainer } from 'react-toastify'; // Importa toast y ToastContainer
+import 'react-toastify/dist/ReactToastify.css';
 
 axios.defaults.baseURL = 'http://localhost:5000';
 
@@ -45,11 +47,12 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, onClose }) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['tasks'] });
+      toast.success("Tarea creada con éxito!");
       onClose();
     },
     onError: (error) => {
       console.error("Error creando tarea:", error);
-      // Aquí podrías mostrar un mensaje de error al usuario usando un estado local
+      toast.error("Error al crear la tarea. Inténtalo de nuevo.");      
     }
   });
 
@@ -57,6 +60,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, onClose }) => {
     try {
       await mutation.mutateAsync(data);
     } catch (error) {
+      toast.error("Error al enviar el formulario.");   
       console.error("Error al enviar el formulario:", error);
     }
   };
@@ -94,6 +98,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, onClose }) => {
         <SubmitButton type="submit">{task ? 'Actualizar' : 'Crear'}</SubmitButton>
         <CancelButton type="button" onClick={onClose}>Cancelar</CancelButton>
       </ButtonContainer>
+            
     </Form>
   );
 };
