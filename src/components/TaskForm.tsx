@@ -17,12 +17,13 @@ interface Task {
   createdAt: string;
 }
 
-// Definición de la interfaz TaskFormProps
+// Propiedades para un formulario de tareas en react con TypeScript
 interface TaskFormProps {
   task?: Task;
   onClose: () => void;
 }
 
+//define las propiedades que puede recibir un componente de entrada 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
     error?: boolean;
   }
@@ -64,9 +65,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ task, onClose }) => {
       onClose();
     },
     onError: (error) => {
-      console.error("Error creando tarea:", error);
-      //toast.error("Error al crear la tarea. Inténtalo de nuevo.");      
-       // Manejo de errores más específico
+      console.error("Error creando tarea:", error); 
        if (axios.isAxiosError(error)) {
         toast.error(`Error al crear la tarea: ${error.response?.data?.message || error.message}`); // Mensaje de error del backend o mensaje genérico
       } else {

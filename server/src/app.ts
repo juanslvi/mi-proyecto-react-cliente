@@ -9,8 +9,9 @@ app.use(cors()); // Usa cors para permitir solicitudes desde el frontend
 //app.use('/api/tasks', taskRoutes);
 app.use('/api', taskRoutes);
 
+/*
 app.get('/test', (req, res) => {
     res.send('Test route works!');
-});
+});*/
 
 export default app;

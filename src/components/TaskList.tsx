@@ -10,6 +10,7 @@ import TaskForm from './TaskForm';
 import { toast, ToastContainer } from 'react-toastify'; // Importa toast y ToastContainer
 import 'react-toastify/dist/ReactToastify.css';
 
+//Se que esto no va aqui
 axios.defaults.baseURL = 'http://localhost:5000';
 
 interface Task {
