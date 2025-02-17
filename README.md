@@ -276,20 +276,20 @@ typescript: ^5.7.3
 1. Clonar el Repositorio
 La persona deberá clonar el repositorio Git en su máquina local. 
 Esto se puede hacer utilizando el comando: git clone https://github.com/juanslvi/mi-proyecto-react-cliente
-Y usa la rama Server: git checkout server.
+Y usa la rama Server: git checkout server. La Rama 'server' en mi-proyecto-react-cliente contiene todo el proyecto.
+
+Nota:(Se que se pidio que estuviera dividido en 2 carpetas/repositorios una para Cliente y otra para Server), se hizo asi en un principio, pero tuve conflictos con el visualStudio y los repositorios y ramas se empezaron a empalmar y decidi solo usar el reporsitorio del 'cliente'.
 
 2. Configurar la Base de Datos (si aplica)
 La persona deberá configurarla en su máquina local. Esto puede implicar la instalación del software de la base 
-de datos (PostgreSQL) y la creación de la base de datos y las tablas necesarias. Se anexara el Backup de la base 
-de datos en el cuerpo del correo.
+de datos (PostgreSQL) y la creación de la base de datos y las tablas necesarias. Se anexara el Backup de la base de datos en el cuerpo del correo.
 
 3. Instalar las Dependencias
 Tanto en la carpeta del cliente (React) como en la del servidor (Node.js), la persona deberá instalar las 
 dependencias del proyecto. Esto se hace generalmente con el comando npm install.
 
 4. Iniciar el Servidor (Backend)
-La persona deberá iniciar el servidor Node.js. Esto se hace generalmente con el comando npm start, pero usaremos 
-el comando 'npm run dev' ya que en desarrollo apunta al index.ts para obtener las APIS programadas.
+La persona deberá iniciar el servidor Node.js. Esto se hace generalmente con el comando npm start, pero usaremos el comando 'npm run dev' ya que en desarrollo apunta al index.ts para obtener las APIS programadas.
 
 5. Iniciar la Aplicación Cliente (Frontend)
 La persona deberá iniciar la aplicación React. Esto se hace generalmente con el comando 'npm start'.
